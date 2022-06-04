@@ -1,0 +1,24 @@
+<%- layout("boiler")-%>
+<div>
+    <%- include("nav")-%>
+</div>
+
+<div class="row">
+    <div class="col-4">
+        <p>hi </p>
+
+    </div>
+    <div class="col-8">
+        <form action="/new_lab" method="post">
+            <input type="text" placeholder="ENTER id" name="newlab_id" ><BR></BR>
+            <input type="text" placeholder="ENTER type" name="newlab_type" ><BR></BR>
+            <input type="number" placeholder="ENTER capacty" name="newlab_capacty" ><BR></BR>
+            <input type="text" placeholder="lab incharge name" name="newlab_incharge_name" ><BR></BR>
+            <textarea name="newlab_discripition" id="lab_discripition" cols="30" rows="10"></textarea>
+
+            <button type="submit">click</button>
+        </form>
+
+    </div>
+
+</div>
