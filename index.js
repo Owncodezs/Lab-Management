@@ -49,31 +49,70 @@ app.get('/user/login',(req,res)=>{
 })
 
 //admin space
-app.get('/adminlogin',(req,res)=>{
+app.get('/admin/space',(req,res)=>{
     console.log("admin_login")
    res.render('admin_space.ejs')
     
 }) 
 
-// //view lab
-// app.get('/viewlab',(req,res)=>{
-//     console.log("admin_login")
-//    res.render('view.ejs')
+//view lab
+app.get('/viewlab',(req,res)=>{
+    console.log("admin_login")
+   res.render('view.ejs')
     
-// }) 
-// app.get('/updatelab',(req,res)=>{
-//     console.log("admin_login")
-//    res.render('update_lab.ejs')
+}) 
+app.get('/updatelab',(req,res)=>{
+    pool.getConnection((err, result) => {
+        if (err) console.log(err.message)
+        else {
+            staffdata="";
+            var sql = `select * from staff_information;`
+            result.query(sql, (err, data, fiels) => {
+                if (err) console.log(err)
+                staffdata=data
+            })
+            console.log('student connected')
+            console.log(result)
+            var sql = `select * from lab;`
+            result.query(sql, (err, labdata, fiels) => {
+                if (err) console.log(err)
+                else {
+                    console.log(labdata)
+                    result.release()
+                    res.render('update_lab.ejs', { labdata,staffdata })
+
+                }
+            })
+        }
+    })
+
     
-// }) 
-// app.get('/reglab',(req,res)=>{
+}) 
+app.get('/reglab',(req,res)=>{
   
-//    res.render('reg_lab.ejs')
+   res.render('reg_lab.ejs')
     
-// })  
-app.get('/new_lab',(req,res)=>{
+})  
+app.get('/newlab',(req,res)=>{
+    pool.getConnection((err, result) => {
+        if (err) console.log(err.message)
+        else {
+            console.log('student connected')
+            console.log(result)
+            var sql = `select * from staff_information;`
+            result.query(sql, (err, data, fiels) => {
+                if (err) console.log(err)
+                else {
+                    console.log(data)
+                    result.release()
+                    res.render('new_lab.ejs', { data })
+
+                }
+            })
+        }
+    })
+
     
-   res.render('new_lab.ejs')
     
 }) 
  
@@ -86,7 +125,7 @@ app.post('/admin/login', (req, res) => {
     pool.getConnection((err, result) => {
         if (err) console.log(err.message)
         else {
-            var sql = `select * from dbmanagement_login where user_id = '${fmuser}'  AND pass= '${fmpass}' AND type= '${fmtype}')`;
+            var sql = `select * from dbmanagement_login where user_id = '${fmuser}'  AND pass= '${fmpass}' AND type= '${fmtype}'`;
             result.query(sql, (err, rows, fields) => {
                 if (err) console.log(err)
                 else if( rows[0].pass=fmpass ) {
@@ -94,7 +133,7 @@ app.post('/admin/login', (req, res) => {
                     res.redirect('/admin/login')
                 }
                 else{  
-                    res.redirect('/login')
+                    res.redirect('/admin/space')
                 }
             })
         }
@@ -103,19 +142,19 @@ app.post('/admin/login', (req, res) => {
 })
 app.post('/user/login', (req, res) => {
     //fmuser='h',fmpass='h',fmtype='h';
-    let {fmuser,fmpass,fmtype}=req.body
-    console.log('data',fmuser,fmpass,fmtype); 
+    let {fuser,fpass,ftype}=req.body
+    console.log('data',fuser,fpass,ftype); 
     pool.getConnection((err, result) => {
         if (err) console.log(err.message)
         else {
-            var sql = `select * from dbmanagement_login where user_id = '${fmuser}'  AND pass= '${fmpass}' AND type= '${fmtype}')`;
+            var sql = `select * from user where u_id = '${fuser}'  AND u_pass= '${fpass}' AND u_type= '${ftype}'`;
             result.query(sql, (err, rows, fields) => {
                 if (err) console.log(err)
-                else if( rows[0].pass=fmpass ) {
+                else if( rows[0].pass=fpass ) {
                     //console.log(rows[0].type)
                     res.redirect('/user/login')
-                }
-                else{  
+                } 
+                else{   
                     res.redirect('/login')
                 }
             })
@@ -124,19 +163,39 @@ app.post('/user/login', (req, res) => {
 
 })
 
-//new lab
-app.post('/new_lab', (req, res) => {
+//update lab
+app.post('/update/lab', (req, res) => {
     //fmuser='h',fmpass='h',fmtype='h';
     let {newlab_id,newlab_type,newlab_capacty,newlab_incharge_name,newlab_discripition}=req.body
     console.log('data',newlab_id,newlab_type,newlab_capacty,newlab_incharge_name,newlab_discripition); 
     pool.getConnection((err, result) => {
         if (err) console.log(err.message)
         else {
-            var sql = `INSERT INTO lab (l_lab_id,l_type,l_capacty,l_lab_inchargename,l_description)VALUES ('${newlab_id}','${newlab_type}',${newlab_capacty},${newlab_incharge_name},'${newlab_discripition}')`;
+            var sql = `UPDATE lab SET l_type='${newlab_type}',l_capacty=${newlab_capacty},l_lab_inchargename='${newlab_incharge_name}',l_description='${newlab_discripition}' WHERE l_lab_id='${newlab_id}'`;
+            result.query(sql, (err, rows, fields) => {
+                if (err) console.log(err)
+                else{
+                    console.log(fields); 
+                }
+            })
+        }
+    })
+
+})
+app.post('/new/lab', (req, res) => {
+    //fmuser='h',fmpass='h',fmtype='h';
+    let {newlab_id,newlab_type,newlab_capacty,newlab_incharge_name,newlab_discripition}=req.body
+    console.log('data',newlab_id,newlab_type,newlab_capacty,newlab_incharge_name,newlab_discripition); 
+    pool.getConnection((err, result) => {
+        if (err) console.log(err.message)
+        else {
+            var sql = `INSERT INTO lab (l_lab_id,l_type,l_capacty,l_lab_inchargename,l_description)VALUES ('${newlab_id}','${newlab_type}',${newlab_capacty},'${newlab_incharge_name}','${newlab_discripition}')`;
             result.query(sql, (err, rows, fields) => {
                 if (err) console.log(err)
                 else{
                     console.log(fields);
+                    res.redirect('/admin/space')
+
                 }
             })
         }
@@ -152,6 +211,26 @@ app.get('/viewlab', (req, res) => {
             console.log('student connected')
             console.log(result)
             var sql = `select * from lab;`
+            result.query(sql, (err, rows, fiels) => {
+                if (err) console.log(err)
+                else {
+                    console.log(rows)
+                    result.release()
+                    res.render('view_lab.ejs', { rows })
+
+                }
+            })
+        }
+    })
+})
+//select a log of lab
+app.get('/viewlab', (req, res) => {
+    pool.getConnection((err, result) => {
+        if (err) console.log(err.message)
+        else {
+            console.log('student connected')
+            console.log(result)
+            var sql = `select * from lablog;`
             result.query(sql, (err, rows, fiels) => {
                 if (err) console.log(err)
                 else {

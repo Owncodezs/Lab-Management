@@ -1,0 +1,50 @@
+<%- layout("boiler")-%>
+<div>
+    <%- include("nav")-%>
+    <div class="container">
+        <div class="row">
+            <div style="width: 25%; float: left;">
+                <%- include("admintemp")-%>
+            </div>
+            <div style="width: 75%;float: right;">
+                You can update labincharge name or discrsion 
+                <form action="/update/lab" method="post" class="form">
+                    <div>
+                    <select class="form-control" name="newlab_id" onchange="myfun(d)" >
+                        <% for (const d of labdata) { %>
+                       
+                          <option value='<%= d.l_lab_id %>'><%= d.l_lab_id %></option>
+                          <% } %> 
+                    </select>
+                    </div>
+                    <input type="text" class="form-control"placeholder="ENTER type" name="newlab_type" ><BR></BR>
+                    <input type="number" class="form-control" placeholder="ENTER capacty" name="newlab_capacty" ><BR></BR>
+                    <select class="form-control" name="newlab_incharge_name"  >
+                        <% for (const comp of staffdata) { %>
+                          <option value='<%= comp.staff_name %>'><%= comp.staff_name %></option>
+                        <% } %> 
+                    </select>
+                    <textarea name="newlab_discripition"class="form-control" id="lab_discripition" cols="30" rows="10"></textarea>
+
+                    <button type="submit"class="btn btn-primary">click</button>
+                    
+
+                </form>
+                <!-- l_lab_id,l_type,l_capacty,l_lab_inchargename,l_description -->
+      
+
+            </div>
+
+    </div>
+
+ 
+
+</div>
+<script>
+
+    function myfun(data){
+
+
+
+    }
+</script>
