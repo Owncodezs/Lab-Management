@@ -1,0 +1,62 @@
+<%- layout("boiler")-%>
+<div>
+    <%- include("nav")-%>
+    <div class="container-fluid">
+        <div class="row">
+            <%- include("admintemp")-%>
+            <div style="width: 75%;float: right;">
+                <table class="table table bordered">
+        
+                    <tr> 
+                        <th>S.No</th>
+                        <th>Reg id</th>
+                        <th>User name</th>
+                        <th>Phone no</th>
+                        <th>User type</th>
+                        <th>Reg date</th>
+                        <th>From time</th>
+                        <th>To time</th>
+                        <th>Status</th>                      
+                    </tr>
+                    <% for( let index=0; index < rows.length; index++ ) { %>
+                    <tr>
+                        <td>
+                            <%= (index+1) %>
+                        </td>
+                        <td>
+                            <%=rows[index].reg_id %>
+                        </td>
+                        <td>
+                            <%=rows[index].u_name %>
+                        </td>
+                        <td>
+                            <%=rows[index].phone %>
+                        </td>
+                        <td>
+                            <%=rows[index].u_type%>
+                        </td>
+                        <td>
+                            <%=rows[index].r_date%>
+                        </td>
+                        <td>
+                            <%=rows[index].lab_from_time%>
+                        </td>
+                        <td>
+                            <%=rows[index].lab_to_time%>
+                        </td>
+                        
+                        <td>
+                            <%=rows[index].u_status%>
+                        </td>
+                       
+                    </tr>
+                    <% } %>
+                </table>
+        
+            </div>
+
+    </div>
+
+ 
+
+</div>

@@ -106,6 +106,7 @@ app.get('/newlab',(req,res)=>{
 app.get('/user/space',(req,res)=>{
     res.render('user_space.ejs')
 })
+
 //new reg
 app.get('/user/reg',(req,res)=>{
     pool.getConnection((err, result) => {
@@ -114,7 +115,7 @@ app.get('/user/reg',(req,res)=>{
             var sql = `select * from lab;`
             result.query(sql, (err, labdata, fiels) => {
                 if (err) console.log(err)
-                else {
+                else { 
                     res.render('usernewlabreg.ejs', {labdata})
  
                 }
@@ -266,6 +267,24 @@ app.get('/reglab', (req, res) => {
                     console.log(rows)
                     result.release()
                     res.render('reg_lab.ejs', { rows })
+
+                }
+            })
+        }
+    })
+})
+app.get('/ureglab', (req, res) => {
+    pool.getConnection((err, result) => {
+        if (err) console.log(err.message)
+        else {
+            console.log('student connected')
+            var sql = `select * from lab_log,user;`
+            result.query(sql, (err, rows, fiels) => {
+                if (err) console.log(err)
+                else {
+                    console.log(rows)
+                    result.release()
+                    res.render('user_reg.ejs', { rows })
 
                 }
             })
