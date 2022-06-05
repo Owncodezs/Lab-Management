@@ -2,26 +2,27 @@
 <div>
     <%- include("nav")-%>
 </div>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div style="width: 25%; float: left;">
-                <%- include("admintemp")-%>
-            </div>
+            <%- include("admintemp")-%>
             <div style="width: 75%;float: right;">
                 <form action="/new/lab" method="post">
-                    <input type="text" placeholder="ENTER id" name="newlab_id" ><BR></BR>
-                    <input type="text" placeholder="ENTER type" name="newlab_type" ><BR></BR>
-                    <input type="number" placeholder="ENTER capacty" name="newlab_capacty" ><BR></BR>
+                    <input type="text" class="form-control" placeholder="ENTER id" name="newlab_id" ><BR></BR>
+                    <input type="text" class="form-control" placeholder="ENTER type" name="newlab_type" ><BR></BR>
+                    <input type="number" class="form-control" placeholder="ENTER capacty" name="newlab_capacty" ><BR></BR>
                     <select class="form-control" name="newlab_incharge_name"  >
                         <% for (const comp of data) { %>
                           <option value='<%= comp.staff_name %>'><%= comp.staff_name %></option>
                         <% } %> 
                     </select>
-                    <textarea name="newlab_discripition" id="lab_discripition" cols="30" rows="10"></textarea>
+                    <textarea class="form-control" name="newlab_discripition" id="lab_discripition" cols="30" rows="10"></textarea>
 
-                    <button type="submit">click</button>
+                    <button type="submit" class="btn btn-primary">click</button>
                     
                 </form>
+            </div>
+            <div style="width: 50px; background: #000; float: right;">
+
             </div>
         </div>
 

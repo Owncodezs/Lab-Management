@@ -55,12 +55,6 @@ app.get('/admin/space',(req,res)=>{
     
 }) 
 
-//view lab
-app.get('/viewlab',(req,res)=>{
-    console.log("admin_login")
-   res.render('view.ejs')
-    
-}) 
 app.get('/updatelab',(req,res)=>{
     pool.getConnection((err, result) => {
         if (err) console.log(err.message)
@@ -88,11 +82,7 @@ app.get('/updatelab',(req,res)=>{
 
     
 }) 
-app.get('/reglab',(req,res)=>{
-  
-   res.render('reg_lab.ejs')
-    
-})  
+ 
 app.get('/newlab',(req,res)=>{
     pool.getConnection((err, result) => {
         if (err) console.log(err.message)
@@ -110,10 +100,28 @@ app.get('/newlab',(req,res)=>{
                 }
             })
         }
+    })   
+}) 
+//user space
+app.get('/user/space',(req,res)=>{
+    res.render('user_space.ejs')
+})
+//new reg
+app.get('/user/reg',(req,res)=>{
+    pool.getConnection((err, result) => {
+        if (err) console.log(err.message)
+        else {
+            var sql = `select * from lab;`
+            result.query(sql, (err, labdata, fiels) => {
+                if (err) console.log(err)
+                else {
+                    res.render('usernewlabreg.ejs', {labdata})
+ 
+                }
+            })
+        }
     })
-
-    
-    
+    //res.render('')
 }) 
  
 //.......................................... 
@@ -152,7 +160,7 @@ app.post('/user/login', (req, res) => {
                 if (err) console.log(err)
                 else if( rows[0].pass=fpass ) {
                     //console.log(rows[0].type)
-                    res.redirect('/user/login')
+                    res.redirect('/user/space')
                 } 
                 else{   
                     res.redirect('/login')
@@ -178,7 +186,7 @@ app.post('/update/lab', (req, res) => {
                     console.log(fields); 
                 }
             })
-        }
+        } 
     })
 
 })
@@ -195,6 +203,27 @@ app.post('/new/lab', (req, res) => {
                 else{
                     console.log(fields);
                     res.redirect('/admin/space')
+
+                }
+            })
+        }
+    })
+
+})
+//new regstation
+app.post('/new/reg', (req, res) => {
+    //fmuser='h',fmpass='h',fmtype='h';
+    let {u_regesterid,u_id,lab_id,u_type,fromtime,totime,u_count}=req.body
+    console.log('data'); 
+    pool.getConnection((err, result) => {
+        if (err) console.log(err.message)
+        else {
+            var sql = `INSERT INTO lab_log (reg_id,u_id,u_type,lab_from_time,lab_to_time,lab_id,no_user )VALUES ('${u_regesterid}','${u_id}','${u_type}','${fromtime}','${totime}','${lab_id}',${u_count})`;
+            result.query(sql, (err, rows, fields) => {
+                if (err) console.log(err)
+                else{
+                    console.log(fields);
+                    res.redirect('/user/space')
 
                 }
             })
@@ -223,20 +252,20 @@ app.get('/viewlab', (req, res) => {
         }
     })
 })
+
 //select a log of lab
-app.get('/viewlab', (req, res) => {
+app.get('/reglab', (req, res) => {
     pool.getConnection((err, result) => {
         if (err) console.log(err.message)
         else {
             console.log('student connected')
-            console.log(result)
-            var sql = `select * from lablog;`
+            var sql = `select * from lab_log,user;`
             result.query(sql, (err, rows, fiels) => {
                 if (err) console.log(err)
                 else {
                     console.log(rows)
                     result.release()
-                    res.render('view_lab.ejs', { rows })
+                    res.render('reg_lab.ejs', { rows })
 
                 }
             })

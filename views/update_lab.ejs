@@ -1,12 +1,10 @@
 <%- layout("boiler")-%>
 <div>
     <%- include("nav")-%>
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div style="width: 25%; float: left;">
-                <%- include("admintemp")-%>
-            </div>
-            <div style="width: 75%;float: right;">
+            <%- include("admintemp")-%>
+            <div style="width: 75%;float: right;"><br>
                 You can update labincharge name or discrsion 
                 <form action="/update/lab" method="post" class="form">
                     <div>
