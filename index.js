@@ -38,7 +38,7 @@ app.use(express.static(path.join(__dirname, 'static')));
 
 //---------------------------------------------------------------------------------------------------------
 
-//----------------------------------------------------------------------------------------------------------
+//-------------------------------eddw---------------------------------------------------------------------------
 //log out
 app.get('/logout',(req,res)=>{
     req.session.destroy();
@@ -227,7 +227,7 @@ app.get('/reglab', (req, res) => {
             if (err) console.log(err.message)
             else {
                 console.log('student connected')
-                var sql = `select * from lab_log,user;`
+                var sql = `select * from lab_log NATURAL JOIN user ;`
                 result.query(sql, (err, rows, fiels) => {
                     if (err) console.log(err)
                     else {
@@ -253,7 +253,7 @@ app.get('/myreg', (req, res) => {
             if (err) console.log(err.message)
             else {
                 console.log('student connected')
-                var sql = `select * from lab_log,user as u where u.u_id='${req.session.username}';`
+                var sql = `select * from lab_log NATURAL JOIN user WHERE u_id='${req.session.username}';`
                 result.query(sql, (err, rows, fiels) => {
                     if (err) console.log(err)
                     else {
@@ -269,6 +269,18 @@ app.get('/myreg', (req, res) => {
         else{
             console.log("pls login as user");
             res.render('user_login.ejs');
+        }
+    
+})
+//day entery
+app.get('/entery', (req, res) => {
+    if(req.session.adminlogin){
+        console.log("admin_login@dayentery")
+        res.render('admin_dayentery.ejs');
+        }
+        else{
+            console.log("pls login as admin");
+            res.render('admin_login.ejs');
         }
     
 })
@@ -387,7 +399,7 @@ app.get('/ureglab', (req, res) => {
             if (err) console.log(err.message)
             else {
                 console.log('student connected')
-                var sql = `select * from lab_log,user;`
+                var sql = `select * from lab_log NATURAL JOIN user;`
                 result.query(sql, (err, rows, fiels) => {
                     if (err) console.log(err)
                     else {
