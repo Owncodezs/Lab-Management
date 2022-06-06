@@ -1,0 +1,50 @@
+<%- layout("boiler")-%>
+<div>
+    <%- include("nav")-%>
+    <div class="container-fluid">
+        <div class="row">
+                <%- include("user_spacebtn")-%>
+            <div style="width: 75%;float: right;">
+                <table class="table table bordered">
+        
+                    <tr> 
+                        <th>S.No</th>
+                        <th>Lab id</th>
+                        <th>Type</th>
+                        <th>capacty</th>
+                        <th>name</th>
+                        <th>discrisption</th>
+                      
+                    </tr>
+                    <% for( let index=0; index < rows.length; index++ ) { %>
+                    <tr>
+                        <td>
+                            <%= (index+1) %>
+                        </td>
+                        <td>
+                            <%=rows[index].l_lab_id%>
+                        </td>
+                        <td>
+                            <%=rows[index].l_type%>
+                        </td>
+                        <td>
+                            <%=rows[index].l_capacty%>
+                        </td>
+                        <td>
+                            <%=rows[index].l_lab_inchargename%>
+                        </td>
+                        <td>
+                            <%=rows[index].l_description%>
+                        </td>
+                       
+                    </tr>
+                    <% } %>
+                </table>
+        
+            </div>
+
+    </div>
+
+ 
+
+</div>
