@@ -1,11 +1,64 @@
 <%- layout("boiler")-%>
 <div>
     <%- include("nav")-%>
-<div class="row">
-    <%- include("admintemp")-%>
-    <div>
-        
+</div>
+    <div class="container-fluid">
+        <div class="row">
+            <%- include("admintemp")-%>
+            <div style="width: 75%;float: right; ">
+                <form action="/updateuse" class="form">
+
+                   
+                <div class="form-group">
+                    <label for="reg_id"> Reg id</label>
+                    <select name="reg_id" id="reg_id" class="form-control" >
+                        <% for( let index=0; index < rows.length; index++ ) { %>
+                            <% var d=rows[index]%>
+
+                        <option value='<%=d %>'  onclick="optionselect(<%=d%>)" ><%=d %></option> 
+                        <% } %> 
+                    </select>
+                </div>
+                <select name="sel" id="sel">
+                    <option value="hi1" onclick="my1(1)" >1</option>
+                    <option value="hi2" onclick="my1(2)" >1</option>
+                </select>
+                </form>
+                <div id="register_data">
+                
+                </div>
+            </div>
+
+        </div>
     </div>
+    
+    <p id="p"></p>
 
 
 </div>
+
+
+<script>
+      function my1(a){
+        alert(a)
+    }   
+    function optionselect( datas){
+    alert(typeof datas);
+}
+
+</script>
+
+
+<!-- document.getElementById('p').innerHTML="hihjfgshdhfgjsdjgfhjhdgfhsdfhdsgjhsgdfhgjh"
+function optionselect(){
+    alert('data');
+
+}
+function my1(a){
+    document.getElementById('p').innerHTML="hi"+a
+}
+
+///
+let mydata= <%- rows.data%>;
+// var arr=Object.entries(mydata)
+document.getElementById('p').innerHTML= typeof mydata; -->

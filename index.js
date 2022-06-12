@@ -5,7 +5,10 @@ const cookieparser=require("cookie-parser")
 const bodyParser = require('body-parser');
 const { createPool } = require('mysql');
 const mysql = require('mysql')
-
+const { check, validationResult } = require('express-validator')
+const urlencodedParser = bodyParser.urlencoded({ extended: false })
+var today = new Date();
+var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 
 const pool = mysql.createPool({
     host: "localhost",
@@ -25,7 +28,7 @@ const app = express()
 // app.use(express.static(path.join(__dirname, "/public")))
 app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
-app.use(bodyParser.urlencoded({ extended: true }));
+//app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieparser())
 app.use(session({
     secret: 'secret',
@@ -268,23 +271,56 @@ app.get('/myreg', (req, res) => {
         }
         else{
             console.log("pls login as user");
+
             res.render('user_login.ejs');
         }
     
 })
 //day entery
 app.get('/entery', (req, res) => {
-    if(req.session.adminlogin){
-        console.log("admin_login@dayentery")
-        res.render('admin_dayentery.ejs');
-        }
-        else{
-            console.log("pls login as admin");
-            res.render('admin_login.ejs');
-        }
+    // if(req.session.adminlogin){
+    //     console.log("admin_login@dayentery")
+            
+    //     // res.render('admin_dayentery.ejs');
+
+    //     }
+    //     else{
+    //         console.log("pls login as admin");
+    //         res.render('admin_login.ejs');
+    //     }
+        pool.getConnection((err, result) => {
+            if (err) console.log(err.message)
+            else {
+                console.log('day entery')
+                var sql = `select * from lab_log;`
+                result.query(sql, (err, rows, fiels) => {
+                    if (err) console.log(err)
+                    else {
+                        result.release()
+                        res.render('admin_dayentery', { rows })
     
-})
+                    }
+                }) 
+            }
+        })
+    
+})  
 //update lab
+app.post('/updateuse',(req,res)=>{
+    pool.getConnection((err, result) => {
+        if (err) console.log(err.message)
+        else {
+            var sql = `UPDATE lab_log SET status='use' WHERE reg_id='${newlab_id}'`;
+            result.query(sql, (err, rows, fields) => {
+                if (err) console.log(err)
+                else{
+                    console.log(fields); 
+                }
+            }) 
+        } 
+    })
+
+})
 app.post('/update/lab', (req, res) => {
     //fmuser='h',fmpass='h',fmtype='h';
     let {newlab_id,newlab_type,newlab_capacty,newlab_incharge_name,newlab_discripition}=req.body
@@ -298,7 +334,7 @@ app.post('/update/lab', (req, res) => {
                 else{
                     console.log(fields); 
                 }
-            })
+            }) 
         } 
     })
 
@@ -332,11 +368,15 @@ app.get('/user/space',(req,res)=>{
         console.log("user_login")
         res.render('user_space.ejs')
     }  
-    else{
+    else{ 
         console.log("pls login as user");
         res.render('user_login.ejs');
     }
 })
+
+// var today = new Date();
+// var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+// console.log(date)
 
 //new reg
 app.get('/user/reg',(req,res)=>{
@@ -371,7 +411,7 @@ app.get('/avalablelab', (req, res) => {
         pool.getConnection((err, result) => {
             if (err) console.log(err.message)
             else {
-                console.log('student connected')
+                
                 var sql = `select * from lab;`
                 result.query(sql, (err, rows, fiels) => {
                     if (err) console.log(err)
@@ -398,8 +438,8 @@ app.get('/ureglab', (req, res) => {
         pool.getConnection((err, result) => {
             if (err) console.log(err.message)
             else {
-                console.log('student connected')
-                var sql = `select * from lab_log NATURAL JOIN user;`
+                console.log('student connected '+date)
+                var sql = `select * from lab_log NATURAL JOIN user WHERE r_date >'${date}'; `
                 result.query(sql, (err, rows, fiels) => {
                     if (err) console.log(err)
                     else {
@@ -422,12 +462,12 @@ app.get('/ureglab', (req, res) => {
 //new regstation
 app.post('/new/reg', (req, res) => {
     //fmuser='h',fmpass='h',fmtype='h';
-    let {u_regesterid,u_id,lab_id,u_type,fromtime,totime,u_count}=req.body
+    let {u_id,lab_id,u_type,fromtime,totime,u_count}=req.body
     console.log('data'); 
     pool.getConnection((err, result) => {
         if (err) console.log(err.message)
         else {
-            var sql = `INSERT INTO lab_log (reg_id,u_id,u_type,lab_from_time,lab_to_time,lab_id,no_user )VALUES ('${u_regesterid}','${u_id}','${u_type}','${fromtime}','${totime}','${lab_id}',${u_count})`;
+            var sql = `INSERT INTO lab_log (u_id,u_type,lab_from_time,lab_to_time,lab_id,no_user )VALUES ('${u_id}','${u_type}','${fromtime}','${totime}','${lab_id}',${u_count})`;
             result.query(sql, (err, rows, fields) => {
                 if (err) console.log(err)
                 else{
@@ -441,8 +481,9 @@ app.post('/new/reg', (req, res) => {
 
 })
 
+	
 
-//select a log of lab
+//select a log of lab 
 
 ///-------------------------------------------------
 

@@ -9,7 +9,6 @@
         
                     <tr> 
                         <th>S.No</th>
-                        <th>Reg id</th>
                         <th>User name</th>
                         <th>Phone no</th>
                         <th>User type</th>
@@ -24,9 +23,6 @@
                             <%= (index+1) %>
                         </td>
                         <td>
-                            <%=rows[index].reg_id %>
-                        </td>
-                        <td>
                             <%=rows[index].u_name %>
                         </td>
                         <td>
@@ -36,7 +32,7 @@
                             <%=rows[index].u_type%>
                         </td>
                         <td>
-                            <%=rows[index].r_date%>
+                            <%= rows[index].r_date%>
                         </td>
                         <td>
                             <%=rows[index].lab_from_time%>
