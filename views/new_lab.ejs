@@ -12,7 +12,7 @@
                     <input type="number" class="form-control" placeholder="ENTER capacty" name="newlab_capacty" ><BR></BR>
                     <select class="form-control" name="newlab_incharge_name"  >
                         <% for (const comp of data) { %>
-                          <option value='<%= comp.staff_name %>'><%= comp.staff_name %></option>
+                          <option value='<%= comp.staff_id %>'><%= comp.staff_name %></option>
                         <% } %> 
                     </select>
                     <textarea class="form-control" name="newlab_discripition" id="lab_discripition" cols="30" rows="10"></textarea>
