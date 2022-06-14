@@ -76,7 +76,7 @@ app.post('/admin/login', (req, res) => {
     pool.getConnection((err, result) => {
         if (err) console.log(err.message)
         else {
-            var sql = `select * from dbmanagement_login where user_id = '${fmuser}'  AND pass= '${fmpass}' AND type ='${fmtype}' `;
+            var sql = `select * from dbmanagement_login where user_id = '${fmuser }' AND pass= '${fmpass}' AND type ='${fmtype}' `;
             result.query(sql, (err, rows, fields) => {
                 if (err) console.log(err)
                 else if( rows[0].pass==fmpass ) {
@@ -107,6 +107,7 @@ app.post('/user/login', (req, res) => {
                 else if( rows[0].pass=fpass ) {
                     req.session.userlogin=true;
                     req.session.username=fuser;
+                    
                     //console.log(rows[0].type)
                     res.redirect('/user/space')
                 } 
@@ -124,7 +125,7 @@ app.post('/user/login', (req, res) => {
 app.get('/admin/space',(req,res)=>{
     // console.log(req.session.)
     if(req.session.adminlogin){
-        if(req.session.type=='admin'){
+        if(req.session.admintype=='admin'){
             console.log("admin_login")
             res.render('admin_space.ejs')
         }
@@ -140,7 +141,7 @@ app.get('/admin/space',(req,res)=>{
         res.render('admin_login.ejs');
     }
 }) 
-
+  
 app.get('/updatelab',(req,res)=>{
     if(req.session.adminlogin){
         console.log("admin_login@update")
